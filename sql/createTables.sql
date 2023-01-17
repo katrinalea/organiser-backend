@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS food;
+DROP TABLE IF EXISTS toDo;
 
-CREATE TABLE  food (
-    id          serial PRIMARY KEY,
-    title       varchar(40) NOT NULL
-);
-
-INSERT INTO food (title) VALUES ('sourdough'), ('olive oil'), ('pizza'), ('picanha'), ('gorgonzola'), ('basil');
+create table toDo (
+  id serial,
+  message text not null,
+  date DATE,
+  completed boolean );
+  
+  insert into toDo (message, completed) values ('hello tester', false);

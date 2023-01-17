@@ -32,6 +32,19 @@ app.get("/health-check", async (req, res) => {
   }
 });
 
+app.get("/todo/items", async (req, res) => {
+  try {
+    const text = "select * from toDo where completed = 'false'";
+    const dbResponse = await client.query(text);
+    res.status(200).json({
+      status: "success",
+      data: dbResponse.rows,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 connectToDBAndStartListening();
 
 async function connectToDBAndStartListening() {
