@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS toDo;
+DROP TABLE IF EXISTS todolist;
 
 create table toDo (
   id serial,
