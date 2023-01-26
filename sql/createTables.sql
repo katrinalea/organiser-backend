@@ -19,3 +19,21 @@ create table phonebook (
   phonenumber varchar(10)
 
 );
+insert into
+  phonebook (first_name, second_name, phonenumber)
+values
+  ('katrina', 'woolley', '1234567893')
+
+DROP TABLE IF EXISTS addressbook;
+create table addressbook (
+  id serial,
+  first_name text,
+  second_name text,
+  street_name text,
+  house_number varchar(10),
+  postcode varchar(8),
+  town text
+);
+
+insert into addressbook (first_name, second_name, street_name, house_number, postcode, town)
+values ('katrina', 'woolley', 'seabank road', '23', 'ch44 0ee', 'wallasey')

@@ -66,6 +66,15 @@ app.get("/phonebook/items", async (req, res) => {
   });
 });
 
+app.get("/addressbook/entries", async (req, res) => {
+  const text = "select * from addressbook";
+  const dbResponse = await client.query(text);
+  res.status(200).json({
+    status: "success",
+    data: dbResponse.rows,
+  });
+});
+
 //-------------------------------------------------------------------------- post requests
 app.post("/todo/items", async (req, res) => {
   const { message, completed } = req.body;
@@ -95,6 +104,27 @@ app.post("/phonebook/items", async (req, res) => {
   const text =
     "insert into phonebook (first_name, second_name, phonenumber) values ($1, $2, $3) returning *";
   const values = [first_name, second_name, phonenumber];
+  const dbResult = await client.query(text, values);
+  res.status(201).json({
+    status: "success",
+    data: dbResult.rows,
+  });
+});
+
+app.post("/addressbook/entries", async (req, res) => {
+  const { first_name, second_name, street_name, house_number, postcode, town } =
+    req.body;
+  console.log("entered post");
+  const text =
+    "insert into addressbook (first_name, second_name, street_name, house_number, postcode, town) values ($1, $2, $3, $4, $5, $6) returning *";
+  const values = [
+    first_name,
+    second_name,
+    street_name,
+    house_number,
+    postcode,
+    town,
+  ];
   const dbResult = await client.query(text, values);
   res.status(201).json({
     status: "success",
