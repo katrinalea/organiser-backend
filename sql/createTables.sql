@@ -7,3 +7,15 @@ create table toDo (
   completed boolean );
   
   insert into toDo (message, completed) values ('hello tester', false);
+
+
+
+DROP TABLE IF EXISTS phonebook;
+
+create table phonebook (
+  id serial,
+  first_name text,
+  second_name text,
+  phonenumber varchar(10)
+
+);

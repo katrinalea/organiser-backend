@@ -32,6 +32,8 @@ app.get("/health-check", async (req, res) => {
   }
 });
 
+//-------------------------------------------------------------------------- get requests
+
 app.get("/todo/items", async (req, res) => {
   try {
     const text = "select * from todolist where completed = 'false'";
@@ -45,7 +47,26 @@ app.get("/todo/items", async (req, res) => {
   }
 });
 
-// POST /items
+app.get("/todo/items/completed", async (req, res) => {
+  console.log("entered complete");
+  const text = "select * from todolist where completed = 'true'";
+  const dbResponse = await client.query(text);
+  res.status(200).json({
+    status: "success",
+    data: dbResponse.rows,
+  });
+});
+
+app.get("/phonebook/items", async (req, res) => {
+  const text = "select * from phonebook";
+  const dbResponse = await client.query(text);
+  res.status(200).json({
+    status: "success",
+    data: dbResponse.rows,
+  });
+});
+
+//-------------------------------------------------------------------------- post requests
 app.post("/todo/items", async (req, res) => {
   const { message, completed } = req.body;
   console.log("whole req.bdoy", req.body);
@@ -68,15 +89,20 @@ app.post("/todo/items", async (req, res) => {
   }
 });
 
-app.get("/todo/items/completed", async (req, res) => {
-  console.log("entered complete");
-  const text = "select * from todolist where completed = 'true'";
-  const dbResponse = await client.query(text);
-  res.status(200).json({
+app.post("/phonebook/items", async (req, res) => {
+  const { first_name, second_name, phonenumber } = req.body;
+  console.log("entered post");
+  const text =
+    "insert into phonebook (first_name, second_name, phonenumber) values ($1, $2, $3) returning *";
+  const values = [first_name, second_name, phonenumber];
+  const dbResult = await client.query(text, values);
+  res.status(201).json({
     status: "success",
-    data: dbResponse.rows,
+    data: dbResult.rows,
   });
 });
+
+//-------------------------------------------------------------------------- patch requetss
 
 app.patch("/todo/items/:id", async (req, res) => {
   const { id } = req.body;
@@ -93,6 +119,7 @@ interface update {
   id: number;
   message: string;
 }
+
 app.patch("/todo/update", async (req, res) => {
   console.log("entered update patch", req.body);
   const { id, message }: update = req.body;
@@ -110,7 +137,7 @@ app.patch("/todo/update", async (req, res) => {
   }
 });
 
-// DELETE /items/:id
+//-------------------------------------------------------------------------- delete requests
 app.delete("/todo/items/:id", async (req, res) => {
   const id = req.body.id;
   const text = "delete from todolist where id = $1";
