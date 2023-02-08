@@ -99,7 +99,7 @@ app.get("/quotes", async (req, res) => {
 app.post("/todo/items", async (req, res) => {
   const { message, completed } = req.body;
   console.log("whole req.bdoy", req.body);
-  if (typeof message === "string") {
+  if (message.length > 1) {
     const text =
       "insert into todolist (message, completed) values ($1, $2) returning *";
     const values = [message, completed];
@@ -112,7 +112,7 @@ app.post("/todo/items", async (req, res) => {
     res.status(400).json({
       status: "fail",
       data: {
-        message: " A string value is required",
+        message: " A message value is required",
       },
     });
   }
@@ -121,6 +121,7 @@ app.post("/todo/items", async (req, res) => {
 app.post("/phonebook/items", async (req, res) => {
   const { first_name, second_name, phonenumber } = req.body;
   console.log("entered post");
+  if (first_name.length > 1 && second_name.length > 1) {
   const text =
     "insert into phonebook (first_name, second_name, phonenumber) values ($1, $2, $3) returning *";
   const values = [first_name, second_name, phonenumber];
@@ -129,6 +130,15 @@ app.post("/phonebook/items", async (req, res) => {
     status: "success",
     data: dbResult.rows,
   });
+} else {
+  res.status(400).json({
+    status: "fail",
+    data: {
+      message: " A string is required",
+    },
+  });
+
+}
 });
 
 app.post("/addressbook/entries", async (req, res) => {
