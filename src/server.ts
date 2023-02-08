@@ -75,6 +75,26 @@ app.get("/addressbook/entries", async (req, res) => {
   });
 });
 
+app.get("/notes/items", async (req, res) => {
+  const text = "select * from notes";
+  const dbResponse = await client.query(text);
+  res.status(200).json({
+    status: "success",
+    data: dbResponse.rows,
+  });
+});
+
+
+app.get("/quotes", async (req, res) => {
+  const text = "select * from quotes";
+  const dbResponse = await client.query(text);
+  res.status(200).json({
+    status: "success",
+    data: dbResponse.rows,
+  });
+});
+
+
 //-------------------------------------------------------------------------- post requests
 app.post("/todo/items", async (req, res) => {
   const { message, completed } = req.body;
@@ -125,6 +145,19 @@ app.post("/addressbook/entries", async (req, res) => {
     postcode,
     town,
   ];
+  const dbResult = await client.query(text, values);
+  res.status(201).json({
+    status: "success",
+    data: dbResult.rows,
+  });
+});
+
+app.post("/notes/items", async (req, res) => {
+  const { title, message } = req.body;
+  console.log("entered post");
+  const text =
+    "insert into notes (title, message) values ($1, $2) returning *";
+  const values = [title, message];
   const dbResult = await client.query(text, values);
   res.status(201).json({
     status: "success",

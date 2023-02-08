@@ -37,3 +37,11 @@ create table addressbook (
 
 insert into addressbook (first_name, second_name, street_name, house_number, postcode, town)
 values ('katrina', 'woolley', 'seabank road', '23', 'ch44 0ee', 'wallasey')
+
+
+  
+  DROP TABLE IF EXISTS notes;
+  create table notes (
+    id serial,
+    title text,
+    message text not null )
